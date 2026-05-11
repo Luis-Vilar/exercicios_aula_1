@@ -23,9 +23,11 @@ void main(List<String> arguments) {
   //? Imprimir a média do lucro: Média valor compra: R$3,50
 
   print("\n\nMAIOR PARTE DOS PRODUTOS DA LUCRO?:\n");
+  printLucro(compared: 0);
   //? imprimir "SIM" ou "NÃO"
 
   print("\n\nMAIOR PARTE DOS PRODUTOS DA LUCRO ACIMA DE R\$2,00?:\n");
+  printLucro(compared: 2);
   //? imprimir "SIM" ou "NÃO"
 
   print("\n\nPRODUTOS QUE DÃO PREJUIZO:\n");

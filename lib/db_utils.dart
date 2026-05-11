@@ -31,3 +31,11 @@ double mediaCalculator({required String key}) {
       .reduce((acc, val) => acc + val);
   return total / produtosTratados.length;
 }
+
+void printLucro({required double compared}) {
+  final approved = produtosTratados
+      .where((produto) => produto['lucro'] > compared)
+      .toList();
+
+  print(approved.length > (produtosTratados.length / 2) ? 'SIM' : 'NÂO');
+}
