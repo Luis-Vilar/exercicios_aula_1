@@ -9,4 +9,12 @@ List<Map<String, dynamic>> produtosTratados = db.produtos.map((produto) {
   return produto;
 }).toList();
 
-
+void printProducts() {
+  final produtos = produtosTratados.map(
+    (produto) =>
+        'ID: ${produto['id']} | PRODUTO: ${produto['produto']} | LUCRO POR VENDA: R\$ ${(produto['lucro'] as double).toStringAsFixed(2).replaceAll('.', ',')}',
+  );
+  for (var produto in produtos) {
+    print(produto);
+  }
+}

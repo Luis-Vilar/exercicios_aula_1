@@ -1,6 +1,8 @@
+import 'package:exercicio/db_utils.dart';
+
 void main(List<String> arguments) {
   print("\n\nPRODUTOS\n");
- 
+  printProducts();
   //*Contexto: Você recebeu uma lista de Produtos da API e
   //*precisar mostrar para o usuário algumas informações,
   //*sendo elas o ID do produto, o nome e o lucro que esta dando
