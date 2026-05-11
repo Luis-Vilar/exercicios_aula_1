@@ -2,10 +2,10 @@ import '../data/produtos.dart' as db;
 
 List<Map<String, dynamic>> produtosTratados = db.produtos.map((produto) {
   produto['valor_venda'] = produto['valor_venda'].replaceAll(',', '.');
+  produto['valor_venda'] = double.parse(produto['valor_venda']);
+  produto['valor_compra'] = double.parse(produto['valor_compra']);
+  produto['lucro'] = produto['valor_venda'] - produto['valor_compra'];
 
-  produto['lucro'] =
-      double.parse(produto['valor_venda']) -
-      double.parse(produto['valor_compra']);
   return produto;
 }).toList();
 
@@ -17,4 +17,17 @@ void printProducts() {
   for (var produto in produtos) {
     print(produto);
   }
+}
+
+void printMedias({required String valor}) {
+  print(
+    'Media valor $valor R\$ ${mediaCalculator(key: valor).toStringAsFixed(2).replaceAll('.', ',')}',
+  );
+}
+
+double mediaCalculator({required String key}) {
+  double total = produtosTratados
+      .map((produto) => produto[key])
+      .reduce((acc, val) => acc + val);
+  return total / produtosTratados.length;
 }

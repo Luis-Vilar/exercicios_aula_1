@@ -13,7 +13,9 @@ void main(List<String> arguments) {
   // print("ID: 1| PRODUTO: oleo | LUCRO POR VENDA: -R$7,00");
 
   print("\n\nMÉDIAS\n");
-
+  printMedias(valor: 'valor_compra');
+  printMedias(valor: 'valor_venda');
+  printMedias(valor: 'lucro');
   //*Contexto: Agora você precisar gerar alguns relatórios sintéticos para o usuário:
 
   //? Imprimir a média do valor de venda: Média valor venda: R$21,00
