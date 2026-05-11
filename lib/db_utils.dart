@@ -9,11 +9,25 @@ List<Map<String, dynamic>> produtosTratados = db.produtos.map((produto) {
   return produto;
 }).toList();
 
-void printProducts() {
-  final produtos = produtosTratados.map(
-    (produto) =>
-        'ID: ${produto['id']} | PRODUTO: ${produto['produto']} | LUCRO POR VENDA: R\$ ${(produto['lucro'] as double).toStringAsFixed(2).replaceAll('.', ',')}',
-  );
+enum Selector { todos, prejuizo }
+
+void printProducts({required Selector selection}) {
+  Iterable<String> produtos = [];
+
+  switch (selection) {
+    case Selector.todos:
+      produtos = produtosTratados.map(
+        (produto) =>
+            'ID: ${produto['id']} | PRODUTO: ${produto['produto']} | LUCRO POR VENDA: R\$ ${(produto['lucro'] as double).toStringAsFixed(2).replaceAll('.', ',')}',
+      );
+    case Selector.prejuizo:
+      produtos = produtosTratados
+          .where((produto) => produto['lucro'] < 0)
+          .map(
+            (produto) =>
+                'ID: ${produto['id']} | PRODUTO: ${produto['produto']} | PREJUICIO: R\$ ${(produto['lucro'] as double).toStringAsFixed(2).replaceAll('.', ',')}',
+          );
+  }
   for (var produto in produtos) {
     print(produto);
   }

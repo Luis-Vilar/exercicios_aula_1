@@ -2,7 +2,7 @@ import 'package:exercicio/db_utils.dart';
 
 void main(List<String> arguments) {
   print("\n\nPRODUTOS\n");
-  printProducts();
+  printProducts(selection: Selector.todos);
   //*Contexto: Você recebeu uma lista de Produtos da API e
   //*precisar mostrar para o usuário algumas informações,
   //*sendo elas o ID do produto, o nome e o lucro que esta dando
@@ -31,7 +31,7 @@ void main(List<String> arguments) {
   //? imprimir "SIM" ou "NÃO"
 
   print("\n\nPRODUTOS QUE DÃO PREJUIZO:\n");
-
+  printProducts(selection: Selector.prejuizo);
   //*Contexto: Agora você precisar gerar um relatório analitico mostrando
   //*os produtos que dão prejuizo:
 
