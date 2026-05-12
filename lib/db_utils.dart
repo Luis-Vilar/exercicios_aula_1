@@ -1,55 +1,90 @@
-import '../data/produtos.dart' as db;
+enum SelectorProdutos { todos, prejuizo }
+enum SelectorMediaCalculator { compra, venda, lucro }
 
-List<Map<String, dynamic>> produtosTratados = db.produtos.map((produto) {
-  produto['valor_venda'] = produto['valor_venda'].replaceAll(',', '.');
-  produto['valor_venda'] = double.parse(produto['valor_venda']);
-  produto['valor_compra'] = double.parse(produto['valor_compra']);
-  produto['lucro'] = produto['valor_venda'] - produto['valor_compra'];
+class Produto {
+  int id;
+  String nome;
+  double valorCompra;
+  double valorVenda;
+  double lucro;
 
-  return produto;
-}).toList();
+  Produto({
+    required this.id,
+    required this.nome,
+    required this.valorCompra,
+    required this.valorVenda,
+    required this.lucro,
+  });
+}
 
-enum Selector { todos, prejuizo }
+class ListaProdutos {
+  List<Produto> produtos;
+  ListaProdutos({required this.produtos});
 
-void printProducts({required Selector selection}) {
-  Iterable<String> produtos = [];
+  void printProducts({required SelectorProdutos selection}) {
+    Iterable<String> produtos = [];
 
-  switch (selection) {
-    case Selector.todos:
-      produtos = produtosTratados.map(
-        (produto) =>
-            'ID: ${produto['id']} | PRODUTO: ${produto['produto']} | LUCRO POR VENDA: R\$ ${(produto['lucro'] as double).toStringAsFixed(2).replaceAll('.', ',')}',
-      );
-    case Selector.prejuizo:
-      produtos = produtosTratados
-          .where((produto) => produto['lucro'] < 0)
-          .map(
-            (produto) =>
-                'ID: ${produto['id']} | PRODUTO: ${produto['produto']} | PREJUICIO: R\$ ${(produto['lucro'] as double).toStringAsFixed(2).replaceAll('.', ',')}',
-          );
+    switch (selection) {
+      case SelectorProdutos.todos:
+        produtos = this.produtos.map(
+          (produto) =>
+              'ID: ${produto.id} | PRODUTO: ${produto.nome} | LUCRO POR VENDA: R\$ ${produto.lucro.toStringAsFixed(2).replaceAll('.', ',')}',
+        );
+      case SelectorProdutos.prejuizo:
+        produtos = this.produtos
+            .where((produto) => produto.lucro < 0)
+            .map(
+              (produto) =>
+                  'ID: ${produto.id} | PRODUTO: ${produto.nome} | PREJUICIO: R\$ ${produto.lucro.toStringAsFixed(2).replaceAll('.', ',')}',
+            );
+    }
+    for (var produto in produtos) {
+      print(produto);
+    }
   }
-  for (var produto in produtos) {
-    print(produto);
+
+  void _printFormattedMessageMedia({
+    required String key,
+    required double value,
+  }) {
+    print(
+      'Media valor $key R\$ ${value.toStringAsFixed(2).replaceAll('.', ',')}',
+    );
+  }
+
+  void printMedias({required SelectorMediaCalculator selector}) {
+    double total = 0;
+    String key = '';
+
+    switch (selector) {
+      case SelectorMediaCalculator.compra:
+        key = 'compra';
+        total = produtos
+            .map((p) => p.valorCompra)
+            .reduce((acc, val) => acc + val);
+      case SelectorMediaCalculator.venda:
+        key = 'venda';
+        total = produtos
+            .map((p) => p.valorVenda)
+            .reduce((acc, val) => acc + val);
+      case SelectorMediaCalculator.lucro:
+        key = 'lucro';
+        total = produtos.map((p) => p.lucro).reduce((acc, val) => acc + val);
+    }
+
+    double media = total / produtos.length;
+    _printFormattedMessageMedia(key: key, value: media);
+  }
+
+  void printLucro({required double compared}) {
+    final approved = produtos
+        .where((produto) => produto.lucro > compared)
+        .toList();
+
+    print(approved.length > (produtos.length / 2) ? 'SIM' : 'NÂO');
   }
 }
 
-void printMedias({required String valor}) {
-  print(
-    'Media valor $valor R\$ ${mediaCalculator(key: valor).toStringAsFixed(2).replaceAll('.', ',')}',
-  );
-}
-
-double mediaCalculator({required String key}) {
-  double total = produtosTratados
-      .map((produto) => produto[key])
-      .reduce((acc, val) => acc + val);
-  return total / produtosTratados.length;
-}
-
-void printLucro({required double compared}) {
-  final approved = produtosTratados
-      .where((produto) => produto['lucro'] > compared)
-      .toList();
-
-  print(approved.length > (produtosTratados.length / 2) ? 'SIM' : 'NÂO');
-}
+//Todo:
+//* - Implementar extensions para formatar valores de moeda -R$ e R$ 
+//* - Renomear 100% para ingles tirando a mistura de linguagens
