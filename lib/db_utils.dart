@@ -1,4 +1,7 @@
+import 'package:exercicio/extensions.dart';
+
 enum SelectorProdutos { todos, prejuizo }
+
 enum SelectorMediaCalculator { compra, venda, lucro }
 
 class Produto {
@@ -28,14 +31,14 @@ class ListaProdutos {
       case SelectorProdutos.todos:
         produtos = this.produtos.map(
           (produto) =>
-              'ID: ${produto.id} | PRODUTO: ${produto.nome} | LUCRO POR VENDA: R\$ ${produto.lucro.toStringAsFixed(2).replaceAll('.', ',')}',
+              'ID: ${produto.id} | PRODUTO: ${produto.nome} | LUCRO POR VENDA: ${produto.lucro.toBrazilianReal()}',
         );
       case SelectorProdutos.prejuizo:
         produtos = this.produtos
             .where((produto) => produto.lucro < 0)
             .map(
               (produto) =>
-                  'ID: ${produto.id} | PRODUTO: ${produto.nome} | PREJUICIO: R\$ ${produto.lucro.toStringAsFixed(2).replaceAll('.', ',')}',
+                  'ID: ${produto.id} | PRODUTO: ${produto.nome} | PREJUICIO: ${produto.lucro.toBrazilianReal()}',
             );
     }
     for (var produto in produtos) {
@@ -47,9 +50,7 @@ class ListaProdutos {
     required String key,
     required double value,
   }) {
-    print(
-      'Media valor $key R\$ ${value.toStringAsFixed(2).replaceAll('.', ',')}',
-    );
+    print('Media valor $key ${value.toBrazilianReal()}');
   }
 
   void printMedias({required SelectorMediaCalculator selector}) {
@@ -85,6 +86,7 @@ class ListaProdutos {
   }
 }
 
+
+
 //Todo:
-//* - Implementar extensions para formatar valores de moeda -R$ e R$ 
 //* - Renomear 100% para ingles tirando a mistura de linguagens
