@@ -1,92 +1,87 @@
 import 'package:exercicio/extensions.dart';
 
-enum SelectorProdutos { todos, prejuizo }
+enum ProductsSelector { all, loss }
 
-enum SelectorMediaCalculator { compra, venda, lucro }
+enum AverageSelector { purchase, sale, profit }
 
-class Produto {
+class Product {
   int id;
-  String nome;
-  double valorCompra;
-  double valorVenda;
-  double lucro;
+  String name;
+  double purchaseValue;
+  double saleValue;
+  double profitValue;
 
-  Produto({
+  Product({
     required this.id,
-    required this.nome,
-    required this.valorCompra,
-    required this.valorVenda,
-    required this.lucro,
+    required this.name,
+    required this.purchaseValue,
+    required this.saleValue,
+    required this.profitValue,
   });
 }
 
-class ListaProdutos {
-  List<Produto> produtos;
-  ListaProdutos({required this.produtos});
+class ListProducts {
+  List<Product> products;
+  ListProducts({required this.products});
 
-  void printProducts({required SelectorProdutos selection}) {
-    Iterable<String> produtos = [];
+  void printProducts({required ProductsSelector selection}) {
+    Iterable<String> productsDescriptions = [];
 
     switch (selection) {
-      case SelectorProdutos.todos:
-        produtos = this.produtos.map(
-          (produto) =>
-              'ID: ${produto.id} | PRODUTO: ${produto.nome} | LUCRO POR VENDA: ${produto.lucro.toBrazilianReal()}',
+      case ProductsSelector.all:
+        productsDescriptions = products.map(
+          (product) =>
+              'ID: ${product.id} | PRODUTO: ${product.name} | LUCRO POR VENDA: ${product.profitValue.toBrazilianReal()}',
         );
-      case SelectorProdutos.prejuizo:
-        produtos = this.produtos
-            .where((produto) => produto.lucro < 0)
+      case ProductsSelector.loss:
+        productsDescriptions = products
+            .where((product) => product.profitValue < 0)
             .map(
-              (produto) =>
-                  'ID: ${produto.id} | PRODUTO: ${produto.nome} | PREJUICIO: ${produto.lucro.toBrazilianReal()}',
+              (product) =>
+                  'ID: ${product.id} | PRODUTO: ${product.name} | PREJUICIO: ${product.profitValue.toBrazilianReal()}',
             );
     }
-    for (var produto in produtos) {
-      print(produto);
+    for (var productDescription in productsDescriptions) {
+      print(productDescription);
     }
   }
 
-  void _printFormattedMessageMedia({
+  void _printFormattedMessageAverage({
     required String key,
     required double value,
   }) {
     print('Media valor $key ${value.toBrazilianReal()}');
   }
 
-  void printMedias({required SelectorMediaCalculator selector}) {
+  void printAverages({required AverageSelector selector}) {
     double total = 0;
     String key = '';
 
     switch (selector) {
-      case SelectorMediaCalculator.compra:
+      case AverageSelector.purchase:
         key = 'compra';
-        total = produtos
-            .map((p) => p.valorCompra)
+        total = products
+            .map((p) => p.purchaseValue)
             .reduce((acc, val) => acc + val);
-      case SelectorMediaCalculator.venda:
+      case AverageSelector.sale:
         key = 'venda';
-        total = produtos
-            .map((p) => p.valorVenda)
+        total = products
+            .map((p) => p.saleValue)
             .reduce((acc, val) => acc + val);
-      case SelectorMediaCalculator.lucro:
+      case AverageSelector.profit:
         key = 'lucro';
-        total = produtos.map((p) => p.lucro).reduce((acc, val) => acc + val);
+        total = products.map((p) => p.profitValue).reduce((acc, val) => acc + val);
     }
 
-    double media = total / produtos.length;
-    _printFormattedMessageMedia(key: key, value: media);
+    double media = total / products.length;
+    _printFormattedMessageAverage(key: key, value: media);
   }
 
-  void printLucro({required double compared}) {
-    final approved = produtos
-        .where((produto) => produto.lucro > compared)
+  void printProfit({required double comparedValue}) {
+    final approved = products
+        .where((product) => product.profitValue > comparedValue)
         .toList();
 
-    print(approved.length > (produtos.length / 2) ? 'SIM' : 'NÂO');
+    print(approved.length > (products.length / 2) ? 'SIM' : 'NÂO');
   }
 }
-
-
-
-//Todo:
-//* - Renomear 100% para ingles tirando a mistura de linguagens

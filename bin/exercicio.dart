@@ -2,25 +2,25 @@ import 'package:exercicio/db_utils.dart';
 import 'package:exercicio/data/produtos.dart' as db;
 
 void main(List<String> arguments) {
-  ListaProdutos produtos = ListaProdutos(
-    produtos: db.produtos.map((produto) {
+  ListProducts products = ListProducts(
+    products: db.produtos.map((produto) {
       produto['valor_venda'] = produto['valor_venda'].replaceAll(',', '.');
       produto['valor_venda'] = double.parse(produto['valor_venda']);
       produto['valor_compra'] = double.parse(produto['valor_compra']);
       produto['lucro'] = produto['valor_venda'] - produto['valor_compra'];
 
-      return Produto(
+      return Product(
         id: (produto['id'] as int),
-        nome: (produto['produto'] as String),
-        valorCompra: (produto['valor_compra'] as double),
-        valorVenda: (produto['valor_venda'] as double),
-        lucro: (produto['lucro'] as double),
+        name: (produto['produto'] as String),
+        purchaseValue: (produto['valor_compra'] as double),
+        saleValue: (produto['valor_venda'] as double),
+        profitValue: (produto['lucro'] as double),
       );
     }).toList(),
   );
 
   print("\n\nPRODUTOS\n");
-  produtos.printProducts(selection: SelectorProdutos.todos);
+  products.printProducts(selection: ProductsSelector.all);
   //*Contexto: Você recebeu uma lista de Produtos da API e
   //*precisar mostrar para o usuário algumas informações,
   //*sendo elas o ID do produto, o nome e o lucro que esta dando
@@ -31,9 +31,9 @@ void main(List<String> arguments) {
   // print("ID: 1| PRODUTO: oleo | LUCRO POR VENDA: -R$7,00");
 
   print("\n\nMÉDIAS\n");
-  produtos.printMedias(selector: SelectorMediaCalculator.compra);
-  produtos.printMedias(selector: SelectorMediaCalculator.venda);
-  produtos.printMedias(selector: SelectorMediaCalculator.lucro);
+  products.printAverages(selector: AverageSelector.purchase);
+  products.printAverages(selector: AverageSelector.sale);
+  products.printAverages(selector: AverageSelector.profit);
   //*Contexto: Agora você precisar gerar alguns relatórios sintéticos para o usuário:
 
   //? Imprimir a média do valor de venda: Média valor venda: R$21,00
@@ -41,15 +41,15 @@ void main(List<String> arguments) {
   //? Imprimir a média do lucro: Média valor compra: R$3,50
 
   print("\n\nMAIOR PARTE DOS PRODUTOS DA LUCRO?:\n");
-  produtos.printLucro(compared: 0);
+  products.printProfit(comparedValue: 0);
   //? imprimir "SIM" ou "NÃO"
 
   print("\n\nMAIOR PARTE DOS PRODUTOS DA LUCRO ACIMA DE R\$2,00?:\n");
-  produtos.printLucro(compared: 2);
+  products.printProfit(comparedValue: 2);
   //? imprimir "SIM" ou "NÃO"
 
   print("\n\nPRODUTOS QUE DÃO PREJUIZO:\n");
-  produtos.printProducts(selection: SelectorProdutos.prejuizo);
+  products.printProducts(selection: ProductsSelector.loss);
   //*Contexto: Agora você precisar gerar um relatório analítico mostrando
   //*os produtos que dão prejuizo:
 
