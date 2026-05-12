@@ -38,7 +38,7 @@ class ListProducts {
             .where((product) => product.profitValue < 0)
             .map(
               (product) =>
-                  'ID: ${product.id} | PRODUTO: ${product.name} | PREJUICIO: ${product.profitValue.toBrazilianReal()}',
+                  'ID: ${product.id} | PRODUTO: ${product.name} | PREJUIZO: ${product.profitValue.toBrazilianReal()}',
             );
     }
     for (var productDescription in productsDescriptions) {
@@ -73,8 +73,8 @@ class ListProducts {
         total = products.map((p) => p.profitValue).reduce((acc, val) => acc + val);
     }
 
-    double media = total / products.length;
-    _printFormattedMessageAverage(key: key, value: media);
+    double average = total / products.length;
+    _printFormattedMessageAverage(key: key, value: average);
   }
 
   void printProfit({required double comparedValue}) {
